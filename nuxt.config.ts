@@ -7,11 +7,8 @@ export default defineNuxtConfig({
     '@nuxtjs/tailwindcss',
     '@nuxt/image',
     '@vueuse/nuxt',
-    '@nuxtjs/color-mode',
-    'nuxt-icon'
+    '@nuxtjs/color-mode'
   ],
-
-  css: ['~/assets/css/main.css'],
 
   app: {
     head: {
@@ -33,6 +30,20 @@ export default defineNuxtConfig({
   },
 
   tailwindcss: {
-    exposeConfig: true
+    exposeConfig: true,
+    config: {
+      theme: {
+        extend: {
+          colors: {
+            'slate-blue': '#6b7a9a',
+            'navy-dark': '#394563',
+            'navy-deeper': '#1a1f2e',
+            'cream': '#ebe9e0',
+            'burgundy': '#8e2423',
+            'burgundy-dark': '#6b1b1a',
+          }
+        }
+      }
+    }
   }
 })

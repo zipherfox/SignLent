@@ -9,7 +9,7 @@
           
           <div class="hidden md:flex items-center space-x-8">
             <NuxtLink to="/" class="text-cream hover:text-burgundy transition-colors duration-300">Home</NuxtLink>
-            <NuxtLink to="/app" class="text-cream hover:text-burgundy transition-colors duration-300">App</NuxtLink>
+            <NuxtLink to="/translator" class="text-cream hover:text-burgundy transition-colors duration-300">App</NuxtLink>
             <NuxtLink to="/about" class="text-cream hover:text-burgundy transition-colors duration-300">About</NuxtLink>
           </div>
 
@@ -22,7 +22,7 @@
         <Transition name="slide-down">
           <div v-if="isMenuOpen" class="md:hidden mt-4 pb-4 space-y-4">
             <NuxtLink to="/" @click="toggleMenu" class="block text-cream hover:text-burgundy transition-colors duration-300">Home</NuxtLink>
-            <NuxtLink to="/app" @click="toggleMenu" class="block text-cream hover:text-burgundy transition-colors duration-300">App</NuxtLink>
+            <NuxtLink to="/translator" @click="toggleMenu" class="block text-cream hover:text-burgundy transition-colors duration-300">App</NuxtLink>
             <NuxtLink to="/about" @click="toggleMenu" class="block text-cream hover:text-burgundy transition-colors duration-300">About</NuxtLink>
           </div>
         </Transition>
@@ -45,7 +45,7 @@
             <h4 class="font-semibold text-cream mb-4">Quick Links</h4>
             <div class="space-y-2">
               <NuxtLink to="/" class="block text-cream/70 hover:text-burgundy transition-colors duration-300">Home</NuxtLink>
-              <NuxtLink to="/app" class="block text-cream/70 hover:text-burgundy transition-colors duration-300">App</NuxtLink>
+              <NuxtLink to="/translator" class="block text-cream/70 hover:text-burgundy transition-colors duration-300">App</NuxtLink>
               <NuxtLink to="/about" class="block text-cream/70 hover:text-burgundy transition-colors duration-300">About</NuxtLink>
             </div>
           </div>

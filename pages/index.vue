@@ -17,7 +17,7 @@
           </p>
           
           <div class="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-in">
-            <NuxtLink to="/app" class="btn-primary">
+            <NuxtLink to="/translator" class="btn-primary">
               <span class="flex items-center gap-2">
                 <Icon name="mdi:hand-wave" class="w-5 h-5" />
                 Try the App
@@ -123,7 +123,7 @@
         <p class="text-xl text-cream/80 mb-8 max-w-2xl mx-auto">
           Join thousands who are already breaking communication barriers with SignLent.
         </p>
-        <NuxtLink to="/app" class="btn-primary inline-block">
+        <NuxtLink to="/translator" class="btn-primary inline-block">
           <span class="flex items-center gap-2">
             <Icon name="mdi:rocket-launch" class="w-5 h-5" />
             Launch App

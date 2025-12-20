@@ -151,7 +151,7 @@
         <!-- Call to Action -->
         <div class="text-center py-12">
           <h2 class="text-3xl font-bold gradient-text mb-6">Ready to Experience SignLent?</h2>
-          <NuxtLink to="/app" class="btn-primary inline-block">
+          <NuxtLink to="/translator" class="btn-primary inline-block">
             <span class="flex items-center gap-2">
               <Icon name="mdi:rocket-launch" class="w-5 h-5" />
               Try the App Now
