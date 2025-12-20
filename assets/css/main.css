@@ -22,7 +22,7 @@
   }
   
   .card {
-    @apply bg-navy-dark rounded-xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300;
+    @apply bg-navy-dark rounded-xl p-6 lg:p-8 shadow-lg hover:shadow-2xl transition-all duration-300;
   }
   
   .gradient-text {

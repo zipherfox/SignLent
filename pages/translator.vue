@@ -1,19 +1,19 @@
 <template>
-  <div class="min-h-screen px-6 py-12">
-    <div class="container mx-auto max-w-6xl">
-      <div class="text-center mb-12">
-        <h1 class="text-4xl md:text-6xl font-bold gradient-text mb-4">SignLent App</h1>
-        <p class="text-xl text-cream/70">Connect your gloves and start translating</p>
+  <div class="min-h-screen px-6 lg:px-12 py-12 lg:py-16">
+    <div class="container mx-auto max-w-8xl">
+      <div class="text-center mb-16">
+        <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold gradient-text mb-6">SignLent App</h1>
+        <p class="text-xl lg:text-2xl text-cream/70">Connect your gloves and start translating</p>
       </div>
 
       <!-- Connection Status -->
-      <div class="card mb-8 text-center">
-        <div class="flex items-center justify-center gap-4 mb-6">
+      <div class="card mb-10 text-center p-10 lg:p-12 max-w-4xl mx-auto">
+        <div class="flex items-center justify-center gap-6 mb-8">
           <div :class="[
-            'w-4 h-4 rounded-full transition-all duration-300',
+            'w-5 h-5 lg:w-6 lg:h-6 rounded-full transition-all duration-300',
             isConnected ? 'bg-green-500 animate-pulse' : 'bg-red-500'
           ]"></div>
-          <h2 class="text-2xl font-bold text-cream">
+          <h2 class="text-3xl lg:text-4xl font-bold text-cream">
             {{ isConnected ? 'Connected' : 'Not Connected' }}
           </h2>
         </div>
@@ -22,10 +22,10 @@
           v-if="!isConnected"
           @click="connectGloves"
           :disabled="isConnecting"
-          class="btn-primary"
+          class="btn-primary text-lg"
         >
           <span class="flex items-center gap-2">
-            <Icon name="mdi:bluetooth" class="w-5 h-5" />
+            <Icon name="mdi:bluetooth" class="w-6 h-6" />
             {{ isConnecting ? 'Connecting...' : 'Connect Gloves' }}
           </span>
         </button>
@@ -33,187 +33,190 @@
         <button 
           v-else
           @click="disconnectGloves"
-          class="btn-secondary"
+          class="btn-secondary text-lg"
         >
           <span class="flex items-center gap-2">
-            <Icon name="mdi:bluetooth-off" class="w-5 h-5" />
+            <Icon name="mdi:bluetooth-off" class="w-6 h-6" />
             Disconnect
           </span>
         </button>
       </div>
 
       <!-- Translation Display -->
-      <div v-if="isConnected" class="space-y-6">
+      <div v-if="isConnected" class="space-y-8 lg:space-y-10">
         <!-- Mode Selection -->
-        <div class="card">
-          <h3 class="text-xl font-bold text-cream mb-4">Translation Mode</h3>
-          <div class="grid md:grid-cols-3 gap-4">
+        <div class="card p-8 lg:p-10">
+          <h3 class="text-2xl lg:text-3xl font-bold text-cream mb-6">Translation Mode</h3>
+          <div class="grid md:grid-cols-3 gap-6 lg:gap-8">
             <button
               @click="translationMode = 'speech'"
               :class="[
-                'p-4 rounded-lg border-2 transition-all duration-300',
+                'p-6 lg:p-8 rounded-lg border-2 transition-all duration-300',
                 translationMode === 'speech' 
                   ? 'border-burgundy bg-burgundy/20' 
                   : 'border-slate-blue/30 hover:border-slate-blue'
               ]"
             >
-              <Icon name="mdi:microphone" class="w-8 h-8 mx-auto mb-2" :class="translationMode === 'speech' ? 'text-burgundy' : 'text-cream'" />
-              <p class="font-semibold text-cream">Text-to-Speech</p>
+              <Icon name="mdi:microphone" class="w-12 h-12 lg:w-14 lg:h-14 mx-auto mb-4" :class="translationMode === 'speech' ? 'text-burgundy' : 'text-cream'" />
+              <p class="font-semibold text-cream text-lg lg:text-xl">Text-to-Speech</p>
             </button>
             
             <button
               @click="translationMode = 'subtitle'"
               :class="[
-                'p-4 rounded-lg border-2 transition-all duration-300',
+                'p-6 lg:p-8 rounded-lg border-2 transition-all duration-300',
                 translationMode === 'subtitle' 
                   ? 'border-burgundy bg-burgundy/20' 
                   : 'border-slate-blue/30 hover:border-slate-blue'
               ]"
             >
-              <Icon name="mdi:television" class="w-8 h-8 mx-auto mb-2" :class="translationMode === 'subtitle' ? 'text-burgundy' : 'text-cream'" />
-              <p class="font-semibold text-cream">Fullscreen Subtitles</p>
+              <Icon name="mdi:television" class="w-12 h-12 lg:w-14 lg:h-14 mx-auto mb-4" :class="translationMode === 'subtitle' ? 'text-burgundy' : 'text-cream'" />
+              <p class="font-semibold text-cream text-lg lg:text-xl">Fullscreen Subtitles</p>
             </button>
             
             <button
               @click="translationMode = 'both'"
               :class="[
-                'p-4 rounded-lg border-2 transition-all duration-300',
+                'p-6 lg:p-8 rounded-lg border-2 transition-all duration-300',
                 translationMode === 'both' 
                   ? 'border-burgundy bg-burgundy/20' 
                   : 'border-slate-blue/30 hover:border-slate-blue'
               ]"
             >
-              <Icon name="mdi:format-list-bulleted-type" class="w-8 h-8 mx-auto mb-2" :class="translationMode === 'both' ? 'text-burgundy' : 'text-cream'" />
-              <p class="font-semibold text-cream">Both</p>
+              <Icon name="mdi:format-list-bulleted-type" class="w-12 h-12 lg:w-14 lg:h-14 mx-auto mb-4" :class="translationMode === 'both' ? 'text-burgundy' : 'text-cream'" />
+              <p class="font-semibold text-cream text-lg lg:text-xl">Both</p>
             </button>
           </div>
         </div>
 
         <!-- Translation Output -->
-        <div class="card">
-          <div class="flex items-center justify-between mb-4">
-            <h3 class="text-xl font-bold text-cream">Live Translation</h3>
+        <div class="card p-8 lg:p-10">
+          <div class="flex items-center justify-between mb-6">
+            <h3 class="text-2xl lg:text-3xl font-bold text-cream">Live Translation</h3>
             <button
               @click="showFullscreen = true"
               v-if="translationMode !== 'speech'"
-              class="btn-secondary py-2 px-4"
+              class="btn-secondary py-3 px-6 text-lg"
             >
               <span class="flex items-center gap-2">
-                <Icon name="mdi:fullscreen" class="w-5 h-5" />
+                <Icon name="mdi:fullscreen" class="w-6 h-6" />
                 Fullscreen
               </span>
             </button>
           </div>
           
-          <div class="bg-navy-deeper rounded-lg p-6 min-h-[200px] flex items-center justify-center">
-            <p class="text-2xl md:text-4xl text-center text-cream animate-fade-in">
+          <div class="bg-navy-deeper rounded-lg p-8 lg:p-12 min-h-[250px] lg:min-h-[300px] flex items-center justify-center">
+            <p class="text-3xl md:text-4xl lg:text-5xl text-center text-cream animate-fade-in leading-tight">
               {{ currentTranslation || 'Start signing to see translation...' }}
             </p>
           </div>
           
-          <div class="mt-4 flex items-center gap-4">
+          <div class="mt-6 flex flex-wrap items-center gap-4 lg:gap-6">
             <button
               @click="toggleSpeech"
               :class="[
-                'flex items-center gap-2 py-2 px-4 rounded-lg transition-all duration-300',
+                'flex items-center gap-2 py-3 px-6 rounded-lg transition-all duration-300 text-lg',
                 speechEnabled ? 'bg-green-500 hover:bg-green-600' : 'bg-slate-blue hover:bg-navy-dark'
               ]"
             >
-              <Icon :name="speechEnabled ? 'mdi:volume-high' : 'mdi:volume-off'" class="w-5 h-5" />
+              <Icon :name="speechEnabled ? 'mdi:volume-high' : 'mdi:volume-off'" class="w-6 h-6" />
               <span>{{ speechEnabled ? 'Mute' : 'Enable Speech' }}</span>
             </button>
             
             <button
               @click="clearTranslation"
-              class="btn-secondary py-2 px-4"
+              class="btn-secondary py-3 px-6 text-lg"
             >
               <span class="flex items-center gap-2">
-                <Icon name="mdi:delete" class="w-5 h-5" />
+                <Icon name="mdi:delete" class="w-6 h-6" />
                 Clear
               </span>
             </button>
           </div>
         </div>
 
-        <!-- Settings -->
-        <div class="card">
-          <h3 class="text-xl font-bold text-cream mb-4">Settings</h3>
-          
-          <div class="space-y-6">
-            <!-- Voice Speed -->
-            <div>
-              <label class="block text-cream mb-2">Voice Speed</label>
-              <input 
-                v-model="voiceSpeed" 
-                type="range" 
-                min="0.5" 
-                max="2" 
-                step="0.1"
-                class="w-full accent-burgundy"
-              />
-              <p class="text-cream/50 text-sm mt-1">{{ voiceSpeed }}x</p>
-            </div>
+        <!-- Settings and History Grid -->
+        <div class="grid lg:grid-cols-2 gap-8 lg:gap-10">
+          <!-- Settings -->
+          <div class="card p-8 lg:p-10">
+            <h3 class="text-2xl lg:text-3xl font-bold text-cream mb-6">Settings</h3>
             
-            <!-- Font Size -->
-            <div>
-              <label class="block text-cream mb-2">Subtitle Font Size</label>
-              <input 
-                v-model="fontSize" 
-                type="range" 
-                min="24" 
-                max="72" 
-                step="4"
-                class="w-full accent-burgundy"
-              />
-              <p class="text-cream/50 text-sm mt-1">{{ fontSize }}px</p>
-            </div>
-            
-            <!-- Auto-clear -->
-            <div class="flex items-center justify-between">
-              <label class="text-cream">Auto-clear after translation</label>
-              <button
-                @click="autoClear = !autoClear"
-                :class="[
-                  'w-12 h-6 rounded-full transition-all duration-300 relative',
-                  autoClear ? 'bg-green-500' : 'bg-slate-blue'
-                ]"
-              >
-                <div
+            <div class="space-y-8">
+              <!-- Voice Speed -->
+              <div>
+                <label class="block text-cream mb-3 text-lg">Voice Speed</label>
+                <input 
+                  v-model="voiceSpeed" 
+                  type="range" 
+                  min="0.5" 
+                  max="2" 
+                  step="0.1"
+                  class="w-full accent-burgundy h-3"
+                />
+                <p class="text-cream/50 text-base mt-2">{{ voiceSpeed }}x</p>
+              </div>
+              
+              <!-- Font Size -->
+              <div>
+                <label class="block text-cream mb-3 text-lg">Subtitle Font Size</label>
+                <input 
+                  v-model="fontSize" 
+                  type="range" 
+                  min="24" 
+                  max="72" 
+                  step="4"
+                  class="w-full accent-burgundy h-3"
+                />
+                <p class="text-cream/50 text-base mt-2">{{ fontSize }}px</p>
+              </div>
+              
+              <!-- Auto-clear -->
+              <div class="flex items-center justify-between">
+                <label class="text-cream text-lg">Auto-clear after translation</label>
+                <button
+                  @click="autoClear = !autoClear"
                   :class="[
-                    'w-5 h-5 rounded-full bg-white absolute top-0.5 transition-all duration-300',
-                    autoClear ? 'left-6' : 'left-0.5'
+                    'w-14 h-7 rounded-full transition-all duration-300 relative',
+                    autoClear ? 'bg-green-500' : 'bg-slate-blue'
                   ]"
-                ></div>
-              </button>
+                >
+                  <div
+                    :class="[
+                      'w-6 h-6 rounded-full bg-white absolute top-0.5 transition-all duration-300',
+                      autoClear ? 'left-7' : 'left-0.5'
+                    ]"
+                  ></div>
+                </button>
+              </div>
             </div>
           </div>
-        </div>
 
-        <!-- Translation History -->
-        <div class="card">
-          <h3 class="text-xl font-bold text-cream mb-4">Translation History</h3>
-          <div class="space-y-2 max-h-60 overflow-y-auto">
-            <div
-              v-for="(item, index) in translationHistory"
-              :key="index"
-              class="bg-navy-deeper rounded p-3 text-cream/70 hover:bg-navy-deeper/50 transition-colors duration-300"
-            >
-              <span class="text-xs text-cream/40">{{ item.time }}</span>
-              <p>{{ item.text }}</p>
+          <!-- Translation History -->
+          <div class="card p-8 lg:p-10">
+            <h3 class="text-2xl lg:text-3xl font-bold text-cream mb-6">Translation History</h3>
+            <div class="space-y-3 max-h-80 overflow-y-auto">
+              <div
+                v-for="(item, index) in translationHistory"
+                :key="index"
+                class="bg-navy-deeper rounded p-4 text-cream/70 hover:bg-navy-deeper/50 transition-colors duration-300"
+              >
+                <span class="text-sm text-cream/40">{{ item.time }}</span>
+                <p class="text-lg">{{ item.text }}</p>
+              </div>
+              <p v-if="translationHistory.length === 0" class="text-cream/50 text-center py-8 text-lg">
+                No translations yet
+              </p>
             </div>
-            <p v-if="translationHistory.length === 0" class="text-cream/50 text-center py-4">
-              No translations yet
-            </p>
           </div>
         </div>
       </div>
 
       <!-- Getting Started Guide -->
-      <div v-else class="grid md:grid-cols-2 gap-6 mt-8">
-        <div class="card">
-          <Icon name="mdi:information" class="w-12 h-12 text-burgundy mb-4" />
-          <h3 class="text-xl font-bold text-cream mb-2">Getting Started</h3>
-          <ol class="text-cream/70 space-y-2 list-decimal list-inside">
+      <div v-else class="grid md:grid-cols-2 gap-8 lg:gap-10 mt-10">
+        <div class="card p-8 lg:p-10">
+          <Icon name="mdi:information" class="w-16 h-16 lg:w-20 lg:h-20 text-burgundy mb-6" />
+          <h3 class="text-2xl lg:text-3xl font-bold text-cream mb-4">Getting Started</h3>
+          <ol class="text-cream/70 space-y-3 list-decimal list-inside text-lg">
             <li>Turn on your SignLent smart gloves</li>
             <li>Click the "Connect Gloves" button above</li>
             <li>Select your device from the Bluetooth list</li>
@@ -222,10 +225,10 @@
           </ol>
         </div>
         
-        <div class="card">
-          <Icon name="mdi:help-circle" class="w-12 h-12 text-burgundy mb-4" />
-          <h3 class="text-xl font-bold text-cream mb-2">Troubleshooting</h3>
-          <ul class="text-cream/70 space-y-2">
+        <div class="card p-8 lg:p-10">
+          <Icon name="mdi:help-circle" class="w-16 h-16 lg:w-20 lg:h-20 text-burgundy mb-6" />
+          <h3 class="text-2xl lg:text-3xl font-bold text-cream mb-4">Troubleshooting</h3>
+          <ul class="text-cream/70 space-y-3 text-lg">
             <li>• Ensure Bluetooth is enabled on your device</li>
             <li>• Make sure the gloves are charged</li>
             <li>• Keep the gloves within 10 meters</li>

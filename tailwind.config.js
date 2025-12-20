@@ -46,6 +46,10 @@ export default {
           '50%': { transform: 'translateY(-10px)' },
         },
       },
+      maxWidth: {
+        '8xl': '88rem',
+        '9xl': '96rem',
+      },
     },
   },
   plugins: [],

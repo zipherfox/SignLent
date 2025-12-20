@@ -1,29 +1,29 @@
 <template>
   <div class="overflow-hidden">
     <!-- Hero Section -->
-    <section class="relative min-h-[90vh] flex items-center justify-center px-6">
+    <section class="relative min-h-[90vh] flex items-center justify-center px-6 lg:px-12">
       <div class="absolute inset-0 bg-gradient-to-br from-burgundy/10 via-navy-deeper to-slate-blue/10"></div>
       
-      <div class="container mx-auto relative z-10">
-        <div class="text-center max-w-4xl mx-auto">
-          <h1 class="text-5xl md:text-7xl font-bold mb-6 animate-slide-down">
+      <div class="container mx-auto relative z-10 max-w-8xl">
+        <div class="text-center max-w-5xl mx-auto">
+          <h1 class="text-5xl md:text-7xl lg:text-8xl font-bold mb-8 animate-slide-down">
             <span class="gradient-text">Breaking Barriers</span><br />
             <span class="text-cream">Through Sign Language</span>
           </h1>
           
-          <p class="text-xl md:text-2xl text-cream/80 mb-8 animate-slide-up">
+          <p class="text-xl md:text-2xl lg:text-3xl text-cream/80 mb-10 animate-slide-up max-w-4xl mx-auto leading-relaxed">
             Real-time sign language translation powered by smart gloves. 
             Communicate freely with speech output and fullscreen subtitles.
           </p>
           
-          <div class="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-in">
-            <NuxtLink to="/translator" class="btn-primary">
+          <div class="flex flex-col sm:flex-row gap-6 justify-center items-center animate-fade-in">
+            <NuxtLink to="/translator" class="btn-primary text-lg">
               <span class="flex items-center gap-2">
-                <Icon name="mdi:hand-wave" class="w-5 h-5" />
+                <Icon name="mdi:hand-wave" class="w-6 h-6" />
                 Try the App
               </span>
             </NuxtLink>
-            <button @click="scrollToFeatures" class="btn-secondary">
+            <button @click="scrollToFeatures" class="btn-secondary text-lg">
               Learn More
             </button>
           </div>
@@ -39,14 +39,14 @@
     </section>
 
     <!-- Features Section -->
-    <section ref="featuresSection" class="py-20 px-6 bg-navy-dark/50">
-      <div class="container mx-auto">
-        <div class="text-center mb-16">
-          <h2 class="text-4xl md:text-5xl font-bold gradient-text mb-4">Key Features</h2>
-          <p class="text-xl text-cream/70">Everything you need to communicate effectively</p>
+    <section ref="featuresSection" class="py-24 lg:py-32 px-6 lg:px-12 bg-navy-dark/50">
+      <div class="container mx-auto max-w-8xl">
+        <div class="text-center mb-20">
+          <h2 class="text-4xl md:text-5xl lg:text-6xl font-bold gradient-text mb-6">Key Features</h2>
+          <p class="text-xl lg:text-2xl text-cream/70">Everything you need to communicate effectively</p>
         </div>
         
-        <div class="grid md:grid-cols-3 gap-8">
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
           <FeatureCard
             icon="mdi:bluetooth"
             title="Wireless Connection"
@@ -82,31 +82,31 @@
     </section>
 
     <!-- How It Works Section -->
-    <section class="py-20 px-6">
-      <div class="container mx-auto">
-        <div class="text-center mb-16">
-          <h2 class="text-4xl md:text-5xl font-bold gradient-text mb-4">How It Works</h2>
-          <p class="text-xl text-cream/70">Simple steps to start communicating</p>
+    <section class="py-24 lg:py-32 px-6 lg:px-12">
+      <div class="container mx-auto max-w-8xl">
+        <div class="text-center mb-20">
+          <h2 class="text-4xl md:text-5xl lg:text-6xl font-bold gradient-text mb-6">How It Works</h2>
+          <p class="text-xl lg:text-2xl text-cream/70">Simple steps to start communicating</p>
         </div>
         
-        <div class="max-w-4xl mx-auto space-y-12">
+        <div class="max-w-6xl mx-auto space-y-16 lg:space-y-20">
           <div v-for="(step, index) in steps" :key="index" 
-               class="flex flex-col md:flex-row items-center gap-8"
+               class="flex flex-col md:flex-row items-center gap-10 lg:gap-16"
                :class="index % 2 === 1 ? 'md:flex-row-reverse' : ''">
             <div class="flex-1">
-              <div class="card">
-                <div class="flex items-center gap-4 mb-4">
-                  <div class="w-12 h-12 bg-burgundy rounded-full flex items-center justify-center text-2xl font-bold">
+              <div class="card p-8 lg:p-10">
+                <div class="flex items-center gap-5 mb-6">
+                  <div class="w-14 h-14 lg:w-16 lg:h-16 bg-burgundy rounded-full flex items-center justify-center text-2xl lg:text-3xl font-bold">
                     {{ index + 1 }}
                   </div>
-                  <h3 class="text-2xl font-bold text-cream">{{ step.title }}</h3>
+                  <h3 class="text-2xl lg:text-3xl font-bold text-cream">{{ step.title }}</h3>
                 </div>
-                <p class="text-cream/70">{{ step.description }}</p>
+                <p class="text-cream/70 text-lg lg:text-xl leading-relaxed">{{ step.description }}</p>
               </div>
             </div>
             <div class="flex-1 flex justify-center">
-              <div class="w-32 h-32 bg-burgundy/20 rounded-full flex items-center justify-center">
-                <Icon :name="step.icon" class="w-16 h-16 text-burgundy" />
+              <div class="w-40 h-40 lg:w-48 lg:h-48 bg-burgundy/20 rounded-full flex items-center justify-center">
+                <Icon :name="step.icon" class="w-20 h-20 lg:w-24 lg:h-24 text-burgundy" />
               </div>
             </div>
           </div>
@@ -115,17 +115,17 @@
     </section>
 
     <!-- CTA Section -->
-    <section class="py-20 px-6 bg-gradient-to-r from-burgundy/20 via-navy-dark to-slate-blue/20">
-      <div class="container mx-auto text-center">
-        <h2 class="text-4xl md:text-5xl font-bold gradient-text mb-6">
+    <section class="py-24 lg:py-32 px-6 lg:px-12 bg-gradient-to-r from-burgundy/20 via-navy-dark to-slate-blue/20">
+      <div class="container mx-auto text-center max-w-8xl">
+        <h2 class="text-4xl md:text-5xl lg:text-6xl font-bold gradient-text mb-8">
           Ready to Start?
         </h2>
-        <p class="text-xl text-cream/80 mb-8 max-w-2xl mx-auto">
+        <p class="text-xl lg:text-2xl text-cream/80 mb-10 max-w-3xl mx-auto leading-relaxed">
           Join thousands who are already breaking communication barriers with SignLent.
         </p>
-        <NuxtLink to="/translator" class="btn-primary inline-block">
+        <NuxtLink to="/translator" class="btn-primary inline-block text-lg">
           <span class="flex items-center gap-2">
-            <Icon name="mdi:rocket-launch" class="w-5 h-5" />
+            <Icon name="mdi:rocket-launch" class="w-6 h-6" />
             Launch App
           </span>
         </NuxtLink>
