@@ -33,6 +33,7 @@ export default {
         'bounce-in': 'bounceIn 0.8s ease-out',
         'rotate-in': 'rotateIn 0.6s ease-out',
         'flip-in': 'flipIn 0.6s ease-out',
+        'wave': 'wave 1.5s ease-in-out infinite alternate',
       },
       keyframes: {
         fadeIn: {
@@ -99,10 +100,18 @@ export default {
           '0%': { transform: 'perspective(400px) rotateY(90deg)', opacity: '0' },
           '100%': { transform: 'perspective(400px) rotateY(0)', opacity: '1' },
         },
+        wave: {
+          'from': { transform: 'rotateZ(-15deg)' },
+          'to': { transform: 'rotateZ(15deg)' },
+        },
       },
       maxWidth: {
         '8xl': '88rem',
         '9xl': '96rem',
+      },
+      fontFamily: {
+        'sans': ['Inter', 'system-ui', 'sans-serif'],
+        'display': ['Poppins', 'Inter', 'system-ui', 'sans-serif'],
       },
     },
   },

@@ -8,7 +8,11 @@
   }
   
   body {
-    @apply bg-navy-deeper text-cream;
+    @apply bg-navy-deeper text-cream font-sans;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display;
   }
 }
 
@@ -29,6 +33,13 @@
     @apply bg-gradient-to-r from-burgundy via-slate-blue to-burgundy bg-clip-text text-transparent;
     background-size: 200% auto;
     animation: shimmer 3s linear infinite;
+  }
+  
+  /* Wave animation class inspired by hello-world-asl */
+  .wave-hand {
+    animation: wave 1.5s ease-in-out infinite alternate;
+    transform-origin: bottom center;
+    display: inline-block;
   }
   
   @keyframes shimmer {

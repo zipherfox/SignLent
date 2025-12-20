@@ -19,7 +19,7 @@
           <div class="flex flex-col sm:flex-row gap-6 justify-center items-center animate-scale-bounce" style="animation-delay: 0.4s;">
             <NuxtLink to="/translator" class="btn-primary text-lg group">
               <span class="flex items-center gap-2">
-                <Icon name="mdi:hand-wave" class="w-6 h-6 group-hover:animate-bounce-in" />
+                <Icon name="mdi:hand-wave" class="w-6 h-6 wave-hand" />
                 Try the App
               </span>
             </NuxtLink>

@@ -19,7 +19,10 @@ export default defineNuxtConfig({
         { name: 'description', content: 'Translate sign language through smart gloves with real-time text-to-speech and subtitle display' }
       ],
       link: [
-        { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+        { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+        { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
+        { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
+        { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800;900&display=swap' }
       ]
     },
     pageTransition: { name: 'page', mode: 'out-in' }
@@ -41,6 +44,10 @@ export default defineNuxtConfig({
             'cream': '#ebe9e0',
             'burgundy': '#8e2423',
             'burgundy-dark': '#6b1b1a',
+          },
+          fontFamily: {
+            'sans': ['Inter', 'system-ui', 'sans-serif'],
+            'display': ['Poppins', 'Inter', 'system-ui', 'sans-serif'],
           }
         }
       }
