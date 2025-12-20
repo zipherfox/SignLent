@@ -6,24 +6,24 @@
       
       <div class="container mx-auto relative z-10 max-w-8xl">
         <div class="text-center max-w-5xl mx-auto">
-          <h1 class="text-5xl md:text-7xl lg:text-8xl font-bold mb-8 animate-slide-down">
+          <h1 class="text-5xl md:text-7xl lg:text-8xl font-bold mb-8 animate-fade-in-down">
             <span class="gradient-text">Breaking Barriers</span><br />
-            <span class="text-cream">Through Sign Language</span>
+            <span class="text-cream animate-fade-in-up">Through Sign Language</span>
           </h1>
           
-          <p class="text-xl md:text-2xl lg:text-3xl text-cream/80 mb-10 animate-slide-up max-w-4xl mx-auto leading-relaxed">
+          <p class="text-xl md:text-2xl lg:text-3xl text-cream/80 mb-10 animate-fade-in-up max-w-4xl mx-auto leading-relaxed" style="animation-delay: 0.2s;">
             Real-time sign language translation powered by smart gloves. 
             Communicate freely with speech output and fullscreen subtitles.
           </p>
           
-          <div class="flex flex-col sm:flex-row gap-6 justify-center items-center animate-fade-in">
-            <NuxtLink to="/translator" class="btn-primary text-lg">
+          <div class="flex flex-col sm:flex-row gap-6 justify-center items-center animate-scale-bounce" style="animation-delay: 0.4s;">
+            <NuxtLink to="/translator" class="btn-primary text-lg group">
               <span class="flex items-center gap-2">
-                <Icon name="mdi:hand-wave" class="w-6 h-6" />
+                <Icon name="mdi:hand-wave" class="w-6 h-6 group-hover:animate-bounce-in" />
                 Try the App
               </span>
             </NuxtLink>
-            <button @click="scrollToFeatures" class="btn-secondary text-lg">
+            <button @click="scrollToFeatures" class="btn-secondary text-lg group">
               Learn More
             </button>
           </div>
@@ -32,51 +32,64 @@
       
       <!-- Animated floating elements -->
       <div class="absolute inset-0 pointer-events-none overflow-hidden">
-        <div class="absolute top-20 left-10 w-20 h-20 bg-burgundy/20 rounded-full animate-float" style="animation-delay: 0s"></div>
-        <div class="absolute top-40 right-20 w-32 h-32 bg-slate-blue/20 rounded-full animate-float" style="animation-delay: 1s"></div>
-        <div class="absolute bottom-40 left-1/4 w-24 h-24 bg-burgundy/10 rounded-full animate-float" style="animation-delay: 2s"></div>
+        <div class="absolute top-20 left-10 w-20 h-20 bg-burgundy/20 rounded-full animate-float animate-pulse-slow" style="animation-delay: 0s"></div>
+        <div class="absolute top-40 right-20 w-32 h-32 bg-slate-blue/20 rounded-full animate-float animate-pulse-slow" style="animation-delay: 1s"></div>
+        <div class="absolute bottom-40 left-1/4 w-24 h-24 bg-burgundy/10 rounded-full animate-float animate-pulse-slow" style="animation-delay: 2s"></div>
+        <div class="absolute top-1/3 right-1/4 w-16 h-16 bg-cream/10 rounded-full animate-float animate-pulse-slow" style="animation-delay: 1.5s"></div>
       </div>
     </section>
 
     <!-- Features Section -->
     <section ref="featuresSection" class="py-24 lg:py-32 px-6 lg:px-12 bg-navy-dark/50">
       <div class="container mx-auto max-w-8xl">
-        <div class="text-center mb-20">
+        <div class="text-center mb-20 animate-fade-in-up">
           <h2 class="text-4xl md:text-5xl lg:text-6xl font-bold gradient-text mb-6">Key Features</h2>
           <p class="text-xl lg:text-2xl text-cream/70">Everything you need to communicate effectively</p>
         </div>
         
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
-          <FeatureCard
-            icon="mdi:bluetooth"
-            title="Wireless Connection"
-            description="Connect seamlessly to smart gloves via Bluetooth for hands-free operation."
-          />
-          <FeatureCard
-            icon="mdi:microphone"
-            title="Text-to-Speech"
-            description="Hear translated words spoken aloud from your mobile device in real-time."
-          />
-          <FeatureCard
-            icon="mdi:television"
-            title="Fullscreen Subtitles"
-            description="Display large, readable subtitles on screen as a secondary camera feed."
-          />
-          <FeatureCard
-            icon="mdi:lightning-bolt"
-            title="Real-Time Translation"
-            description="Instant recognition and translation of sign language gestures."
-          />
-          <FeatureCard
-            icon="mdi:cog"
-            title="Customizable Settings"
-            description="Adjust voice, speed, subtitle size, and more to your preferences."
-          />
-          <FeatureCard
-            icon="mdi:shield-check"
-            title="Privacy First"
-            description="All processing happens on your device. Your data stays with you."
-          />
+          <div class="stagger-item">
+            <FeatureCard
+              icon="mdi:bluetooth"
+              title="Wireless Connection"
+              description="Connect seamlessly to smart gloves via Bluetooth for hands-free operation."
+            />
+          </div>
+          <div class="stagger-item">
+            <FeatureCard
+              icon="mdi:microphone"
+              title="Text-to-Speech"
+              description="Hear translated words spoken aloud from your mobile device in real-time."
+            />
+          </div>
+          <div class="stagger-item">
+            <FeatureCard
+              icon="mdi:television"
+              title="Fullscreen Subtitles"
+              description="Display large, readable subtitles on screen as a secondary camera feed."
+            />
+          </div>
+          <div class="stagger-item">
+            <FeatureCard
+              icon="mdi:lightning-bolt"
+              title="Real-Time Translation"
+              description="Instant recognition and translation of sign language gestures."
+            />
+          </div>
+          <div class="stagger-item">
+            <FeatureCard
+              icon="mdi:cog"
+              title="Customizable Settings"
+              description="Adjust voice, speed, subtitle size, and more to your preferences."
+            />
+          </div>
+          <div class="stagger-item">
+            <FeatureCard
+              icon="mdi:shield-check"
+              title="Privacy First"
+              description="All processing happens on your device. Your data stays with you."
+            />
+          </div>
         </div>
       </div>
     </section>

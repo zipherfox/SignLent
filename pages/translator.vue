@@ -1,19 +1,19 @@
 <template>
   <div class="min-h-screen px-6 lg:px-12 py-12 lg:py-16">
     <div class="container mx-auto max-w-8xl">
-      <div class="text-center mb-16">
+      <div class="text-center mb-16 animate-fade-in-down">
         <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold gradient-text mb-6">SignLent App</h1>
         <p class="text-xl lg:text-2xl text-cream/70">Connect your gloves and start translating</p>
       </div>
 
       <!-- Connection Status -->
-      <div class="card mb-10 text-center p-10 lg:p-12 max-w-4xl mx-auto">
+      <div class="card mb-10 text-center p-10 lg:p-12 max-w-4xl mx-auto animate-scale-in">
         <div class="flex items-center justify-center gap-6 mb-8">
           <div :class="[
-            'w-5 h-5 lg:w-6 lg:h-6 rounded-full transition-all duration-300',
-            isConnected ? 'bg-green-500 animate-pulse' : 'bg-red-500'
+            'w-5 h-5 lg:w-6 lg:h-6 rounded-full transition-all duration-500',
+            isConnected ? 'bg-green-500 animate-pulse shadow-lg shadow-green-500/50' : 'bg-red-500 shadow-lg shadow-red-500/50'
           ]"></div>
-          <h2 class="text-3xl lg:text-4xl font-bold text-cream">
+          <h2 class="text-3xl lg:text-4xl font-bold text-cream transition-all duration-500">
             {{ isConnected ? 'Connected' : 'Not Connected' }}
           </h2>
         </div>
@@ -22,10 +22,11 @@
           v-if="!isConnected"
           @click="connectGloves"
           :disabled="isConnecting"
-          class="btn-primary text-lg"
+          class="btn-primary text-lg transition-all duration-500"
+          :class="{ 'animate-pulse': isConnecting }"
         >
           <span class="flex items-center gap-2">
-            <Icon name="mdi:bluetooth" class="w-6 h-6" />
+            <Icon name="mdi:bluetooth" class="w-6 h-6 transition-transform duration-300" :class="{ 'animate-spin': isConnecting }" />
             {{ isConnecting ? 'Connecting...' : 'Connect Gloves' }}
           </span>
         </button>
@@ -33,7 +34,7 @@
         <button 
           v-else
           @click="disconnectGloves"
-          class="btn-secondary text-lg"
+          class="btn-secondary text-lg transition-all duration-500 hover:bg-red-600"
         >
           <span class="flex items-center gap-2">
             <Icon name="mdi:bluetooth-off" class="w-6 h-6" />
@@ -45,52 +46,52 @@
       <!-- Translation Display -->
       <div v-if="isConnected" class="space-y-8 lg:space-y-10">
         <!-- Mode Selection -->
-        <div class="card p-8 lg:p-10">
+        <div class="card p-8 lg:p-10 animate-fade-in-up">
           <h3 class="text-2xl lg:text-3xl font-bold text-cream mb-6">Translation Mode</h3>
           <div class="grid md:grid-cols-3 gap-6 lg:gap-8">
             <button
               @click="translationMode = 'speech'"
               :class="[
-                'p-6 lg:p-8 rounded-lg border-2 transition-all duration-300',
+                'p-6 lg:p-8 rounded-lg border-2 transition-all duration-500 transform hover:scale-105 hover:-translate-y-1',
                 translationMode === 'speech' 
-                  ? 'border-burgundy bg-burgundy/20' 
-                  : 'border-slate-blue/30 hover:border-slate-blue'
+                  ? 'border-burgundy bg-burgundy/20 shadow-lg shadow-burgundy/30' 
+                  : 'border-slate-blue/30 hover:border-slate-blue hover:shadow-lg'
               ]"
             >
-              <Icon name="mdi:microphone" class="w-12 h-12 lg:w-14 lg:h-14 mx-auto mb-4" :class="translationMode === 'speech' ? 'text-burgundy' : 'text-cream'" />
+              <Icon name="mdi:microphone" class="w-12 h-12 lg:w-14 lg:h-14 mx-auto mb-4 transition-all duration-300" :class="translationMode === 'speech' ? 'text-burgundy animate-pulse-slow' : 'text-cream'" />
               <p class="font-semibold text-cream text-lg lg:text-xl">Text-to-Speech</p>
             </button>
             
             <button
               @click="translationMode = 'subtitle'"
               :class="[
-                'p-6 lg:p-8 rounded-lg border-2 transition-all duration-300',
+                'p-6 lg:p-8 rounded-lg border-2 transition-all duration-500 transform hover:scale-105 hover:-translate-y-1',
                 translationMode === 'subtitle' 
-                  ? 'border-burgundy bg-burgundy/20' 
-                  : 'border-slate-blue/30 hover:border-slate-blue'
+                  ? 'border-burgundy bg-burgundy/20 shadow-lg shadow-burgundy/30' 
+                  : 'border-slate-blue/30 hover:border-slate-blue hover:shadow-lg'
               ]"
             >
-              <Icon name="mdi:television" class="w-12 h-12 lg:w-14 lg:h-14 mx-auto mb-4" :class="translationMode === 'subtitle' ? 'text-burgundy' : 'text-cream'" />
+              <Icon name="mdi:television" class="w-12 h-12 lg:w-14 lg:h-14 mx-auto mb-4 transition-all duration-300" :class="translationMode === 'subtitle' ? 'text-burgundy animate-pulse-slow' : 'text-cream'" />
               <p class="font-semibold text-cream text-lg lg:text-xl">Fullscreen Subtitles</p>
             </button>
             
             <button
               @click="translationMode = 'both'"
               :class="[
-                'p-6 lg:p-8 rounded-lg border-2 transition-all duration-300',
+                'p-6 lg:p-8 rounded-lg border-2 transition-all duration-500 transform hover:scale-105 hover:-translate-y-1',
                 translationMode === 'both' 
-                  ? 'border-burgundy bg-burgundy/20' 
-                  : 'border-slate-blue/30 hover:border-slate-blue'
+                  ? 'border-burgundy bg-burgundy/20 shadow-lg shadow-burgundy/30' 
+                  : 'border-slate-blue/30 hover:border-slate-blue hover:shadow-lg'
               ]"
             >
-              <Icon name="mdi:format-list-bulleted-type" class="w-12 h-12 lg:w-14 lg:h-14 mx-auto mb-4" :class="translationMode === 'both' ? 'text-burgundy' : 'text-cream'" />
+              <Icon name="mdi:format-list-bulleted-type" class="w-12 h-12 lg:w-14 lg:h-14 mx-auto mb-4 transition-all duration-300" :class="translationMode === 'both' ? 'text-burgundy animate-pulse-slow' : 'text-cream'" />
               <p class="font-semibold text-cream text-lg lg:text-xl">Both</p>
             </button>
           </div>
         </div>
 
         <!-- Translation Output -->
-        <div class="card p-8 lg:p-10">
+        <div class="card p-8 lg:p-10 animate-fade-in-up" style="animation-delay: 0.2s;">
           <div class="flex items-center justify-between mb-6">
             <h3 class="text-2xl lg:text-3xl font-bold text-cream">Live Translation</h3>
             <button
