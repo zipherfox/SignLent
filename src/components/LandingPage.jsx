@@ -18,7 +18,7 @@ function LandingPage() {
       <section className="about-section">
         <h2>About SignLent</h2>
         <p>
-          SignLent is an innovative sign hand language recognition application 
+          SignLent is an innovative sign language recognition application 
           that uses cutting-edge technology to bridge the communication gap between 
           sign language users and those who don't understand sign language.
         </p>
