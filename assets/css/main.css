@@ -1,0 +1,65 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    @apply scroll-smooth;
+  }
+  
+  body {
+    @apply bg-navy-deeper text-cream;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-burgundy hover:bg-burgundy-dark text-cream font-semibold py-3 px-8 rounded-lg transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-xl;
+  }
+  
+  .btn-secondary {
+    @apply bg-slate-blue hover:bg-navy-dark text-cream font-semibold py-3 px-8 rounded-lg transition-all duration-300 ease-in-out transform hover:scale-105;
+  }
+  
+  .card {
+    @apply bg-navy-dark rounded-xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300;
+  }
+  
+  .gradient-text {
+    @apply bg-gradient-to-r from-burgundy via-slate-blue to-burgundy bg-clip-text text-transparent;
+  }
+}
+
+/* Page transitions */
+.page-enter-active,
+.page-leave-active {
+  transition: all 0.4s ease-in-out;
+}
+
+.page-enter-from {
+  opacity: 0;
+  transform: translateX(-20px);
+}
+
+.page-leave-to {
+  opacity: 0;
+  transform: translateX(20px);
+}
+
+/* Smooth scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1a1f2e;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #6b7a9a;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #8e2423;
+}
