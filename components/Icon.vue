@@ -1,6 +1,6 @@
 <template>
   <span class="inline-flex items-center justify-center" :class="className">
-    <component :is="iconComponent" />
+    {{ iconMap[name] || '•' }}
   </span>
 </template>
 
@@ -46,10 +46,4 @@ const iconMap: Record<string, string> = {
   'mdi:hospital-building': '🏥',
   'mdi:format-list-bulleted-type': '📋'
 }
-
-const iconComponent = computed(() => {
-  return {
-    template: `<span>${iconMap[props.name] || '•'}</span>`
-  }
-})
 </script>

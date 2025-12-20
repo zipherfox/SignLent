@@ -52,7 +52,7 @@ The app will be available at `http://localhost:3000`
 ## 📱 Pages
 
 1. **Home** (`/`) - Landing page with features and information
-2. **App** (`/app`) - Main application for glove connection and translation
+2. **App** (`/translator`) - Main application for glove connection and translation
 3. **About** (`/about`) - Detailed information about SignLent
 
 ## 🎨 Design
