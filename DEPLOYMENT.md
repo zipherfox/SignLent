@@ -24,7 +24,7 @@ This document provides detailed instructions for deploying SignLent to various c
 2. **Configure Build Settings**
    
    Netlify will automatically detect the settings from `netlify.toml`, but verify:
-   - **Build command**: `npm run build:client`
+   - **Build command**: `npm install -g pnpm@10.14.0 && pnpm install && pnpm run build:client`
    - **Publish directory**: `dist/spa`
    - **Functions directory**: `netlify/functions`
 
@@ -82,7 +82,7 @@ Once connected to GitHub, Netlify will automatically deploy:
    
    Vercel should auto-detect the settings, but verify:
    - **Framework Preset**: Vite
-   - **Build Command**: `npm run build`
+   - **Build Command**: `pnpm run build`
    - **Output Directory**: `dist/spa`
    - **Install Command**: `pnpm install`
 

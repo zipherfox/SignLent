@@ -89,7 +89,7 @@ Add these secrets to your GitHub repository (Settings → Secrets → Actions):
    - Branch deploys: Optionally enable for other branches
 
 3. **Build Settings**
-   - Build command: `npm run build:client`
+   - Build command: `npm install -g pnpm@10.14.0 && pnpm install && pnpm run build:client`
    - Publish directory: `dist/spa`
    - Auto publishing: Enabled
 
@@ -101,13 +101,13 @@ Netlify provides different contexts for deployments:
 # In netlify.toml
 
 [context.production]
-  command = "npm run build:client"
+  command = "npm install -g pnpm@10.14.0 && pnpm install && pnpm run build:client"
   
 [context.deploy-preview]
-  command = "npm run build:client"
+  command = "npm install -g pnpm@10.14.0 && pnpm install && pnpm run build:client"
   
 [context.branch-deploy]
-  command = "npm run build:client"
+  command = "npm install -g pnpm@10.14.0 && pnpm install && pnpm run build:client"
 ```
 
 ### Build Notifications
