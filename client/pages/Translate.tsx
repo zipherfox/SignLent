@@ -3,6 +3,13 @@ import Header from "@/components/Header";
 import { Button } from "@/components/ui/button";
 import { Mic, MicOff, Volume2, Zap, Hand, RotateCw } from "lucide-react";
 import { motion } from "framer-motion";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export default function Translate() {
   const [glovesConnected, setGlovesConnected] = useState(false);
@@ -11,6 +18,13 @@ export default function Translate() {
   const [translationHistory, setTranslationHistory] = useState<string[]>([]);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [cameraActive, setCameraActive] = useState(false);
+  const [cameras, setCameras] = useState<MediaDeviceInfo[]>([]);
+  const [selectedCamera, setSelectedCamera] = useState<string>("");
+
+  useEffect(() => {
+    // Enumerate cameras on mount
+    enumerateCameras();
+  }, []);
 
   useEffect(() => {
     if (cameraActive) {
@@ -19,11 +33,27 @@ export default function Translate() {
     return () => {
       stopCamera();
     };
-  }, [cameraActive]);
+  }, [cameraActive, selectedCamera]);
+
+  const enumerateCameras = async () => {
+    try {
+      const devices = await navigator.mediaDevices.enumerateDevices();
+      const videoDevices = devices.filter((device) => device.kind === "videoinput");
+      setCameras(videoDevices);
+      if (videoDevices.length > 0 && !selectedCamera) {
+        setSelectedCamera(videoDevices[0].deviceId);
+      }
+    } catch (error) {
+      console.error("Error enumerating cameras:", error);
+    }
+  };
 
   const startCamera = async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      const constraints: MediaStreamConstraints = {
+        video: selectedCamera ? { deviceId: { exact: selectedCamera } } : true,
+      };
+      const stream = await navigator.mediaDevices.getUserMedia(constraints);
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
       }
@@ -142,11 +172,33 @@ export default function Translate() {
                     </div>
                   )}
                 </div>
-                <div className="p-4">
+                <div className="p-4 space-y-3">
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                      Select Camera
+                    </label>
+                    <Select
+                      value={selectedCamera}
+                      onValueChange={setSelectedCamera}
+                      disabled={cameras.length === 0}
+                    >
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Choose a camera" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {cameras.map((camera) => (
+                          <SelectItem key={camera.deviceId} value={camera.deviceId}>
+                            {camera.label || `Camera ${cameras.indexOf(camera) + 1}`}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
                   <Button
                     onClick={() => setCameraActive(!cameraActive)}
                     variant="outline"
                     className="w-full"
+                    disabled={cameras.length === 0}
                   >
                     {cameraActive ? "Stop Camera" : "Start Camera"}
                   </Button>
