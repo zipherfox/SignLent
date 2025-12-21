@@ -1,5 +1,5 @@
 [build]
-  command = "npm install -g pnpm@10.14.0 && pnpm install && pnpm run build:client"
+  command = "npm install && npm run build:client"
   functions = "netlify/functions"
   publish = "dist/spa"
 

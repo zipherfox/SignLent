@@ -24,9 +24,11 @@ This document provides detailed instructions for deploying SignLent to various c
 2. **Configure Build Settings**
    
    Netlify will automatically detect the settings from `netlify.toml`, but verify:
-   - **Build command**: `npm install -g pnpm@10.14.0 && pnpm install && pnpm run build:client`
+   - **Build command**: `npm install && npm run build:client`
    - **Publish directory**: `dist/spa`
    - **Functions directory**: `netlify/functions`
+   
+   > Note: Netlify uses `npm` instead of `pnpm` as it's more universally available. The build will use the lockfile to ensure consistent dependencies.
 
 3. **Environment Variables** (Optional)
    
