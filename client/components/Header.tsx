@@ -48,11 +48,6 @@ export default function Header() {
                 )}
               </button>
             )}
-            <Link to="/translate">
-              <Button className="bg-gradient-to-r from-red-700 to-rose-600 hover:from-red-800 hover:to-rose-700 dark:from-red-600 dark:to-rose-500 dark:hover:from-red-700 dark:hover:to-rose-600 text-white font-semibold shadow-lg hover:shadow-xl transition-all text-sm sm:text-base">
-                Get Started
-              </Button>
-            </Link>
           </div>
         </div>
       </div>

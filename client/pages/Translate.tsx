@@ -1,66 +1,105 @@
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 import Header from "@/components/Header";
 import { Button } from "@/components/ui/button";
-import { Mic, MicOff, Volume2, Zap, Hand, RotateCw } from "lucide-react";
+import { Mic, MicOff, Volume2, Hand, RotateCw } from "lucide-react";
 import { motion } from "framer-motion";
+import { useBluetooth } from "@/hooks/use-bluetooth";
+
+interface SensorData {
+  fingers: number[];
+  gyro_Q: number[];
+  gyro: number[];
+  accel: number[];
+}
 
 export default function Translate() {
   const [glovesConnected, setGlovesConnected] = useState(false);
   const [isListening, setIsListening] = useState(false);
+  const [sensorData, setSensorData] = useState<SensorData>({
+    fingers: [],
+    gyro_Q: [],
+    gyro: [],
+    accel: [],
+  });
   const [currentTranslation, setCurrentTranslation] = useState("");
   const [translationHistory, setTranslationHistory] = useState<string[]>([]);
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const [cameraActive, setCameraActive] = useState(false);
 
-  useEffect(() => {
-    if (cameraActive) {
-      startCamera();
+  const BLE_CONFIG = {
+    SENSOR_SERVICE_UUID: "f40d6fd3-70e8-4008-bf64-03a57b87fdc6",
+    SENSOR_CHARACTERISTIC_UUID: "7094fd70-4532-4d73-a118-473a0a63701a",
+    BATTERY_CHARACTERISTIC_UUID: "00002a19-0000-1000-8000-00805f9b34fb", // Standard Battery Service UUID
+  };
+  const {
+    device,
+    connect,
+    requestDevice,
+    startNotifications,
+    stopNotifications,
+  } = useBluetooth();
+
+  const connectToDevice = async () => {
+    await requestDevice({
+      filters: [{ services: [BLE_CONFIG.SENSOR_SERVICE_UUID] }],
+      optionalServices: [BLE_CONFIG.SENSOR_SERVICE_UUID],
+    });
+    if (device && !device.connected) {
+      await connect();
+      setGlovesConnected(device.connected);
     }
-    return () => {
-      stopCamera();
-    };
-  }, [cameraActive]);
+  };
 
-  const startCamera = async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
+  const readData = (value: DataView<ArrayBuffer>) => {
+    const totalBytes = value.byteLength;
+    const PACKET_LEN = 50;
+    for (let base = 0; base + PACKET_LEN <= totalBytes; base += PACKET_LEN) {
+      // Read 5 u16 values for fingers (2 bytes each, big-endian)
+      const fingers: number[] = [];
+      for (let i = 0; i < 5; i++) {
+        fingers.push(value.getUint16(base + i * 2, false)); // false = big-endian
       }
-    } catch (error) {
-      console.error("Error accessing camera:", error);
-      setCameraActive(false);
+
+      // Read 4 f32 values for gyro quaternion (4 bytes each, big-endian)
+      const gyro_Q: number[] = [];
+      const gyro_QOffset = base + 10; // after 5 u16s
+      for (let i = 0; i < 4; i++) {
+        gyro_Q.push(value.getFloat32(gyro_QOffset + i * 4, false)); // false = big-endian
+      }
+
+      // Read 3 f32 values for acceleration (4 bytes each, big-endian)
+      const accel: number[] = [];
+      const accelOffset = base + 26; // after 5 u16s + 4 f32s (10 + 16)
+      for (let i = 0; i < 3; i++) {
+        accel.push(value.getFloat32(accelOffset + i * 4, false)); // false = big-endian
+      }
+
+      // Read 3 f32 values for gyroscope (4 bytes each, big-endian)
+      const gyro: number[] = [];
+      const gyroOffset = base + 38; // after 5 u16s + 4 f32s + 3 f32s (10 + 16 + 12)
+      for (let i = 0; i < 3; i++) {
+        gyro.push(value.getFloat32(gyroOffset + i * 4, false)); // false = big-endian
+      }
+
+      const data: SensorData = { fingers, gyro_Q, gyro, accel };
+      //console.log("📊 Sensor data:", sensorData);
+
+      // Invoke callback for each complete packet received
+      setSensorData(data);
     }
   };
 
-  const stopCamera = () => {
-    if (videoRef.current && videoRef.current.srcObject) {
-      const tracks = (videoRef.current.srcObject as MediaStream).getTracks();
-      tracks.forEach((track) => track.stop());
-    }
-  };
-
-  const handleConnectGloves = () => {
-    setGlovesConnected(!glovesConnected);
-  };
-
-  const handleStartListening = () => {
+  const handleStartListening = async () => {
     setIsListening(!isListening);
-    if (!isListening) {
-      // Simulate translation
-      setTimeout(() => {
-        const mockTranslations = [
-          "Hello",
-          "How are you?",
-          "Thank you",
-          "What is your name?",
-          "I am learning sign language",
-        ];
-        const randomTranslation =
-          mockTranslations[Math.floor(Math.random() * mockTranslations.length)];
-        setCurrentTranslation(randomTranslation);
-        setTranslationHistory([randomTranslation, ...translationHistory.slice(0, 4)]);
-      }, 1000);
+    if (isListening && device?.connected) {
+      await startNotifications(
+        BLE_CONFIG.SENSOR_SERVICE_UUID,
+        BLE_CONFIG.SENSOR_CHARACTERISTIC_UUID,
+        readData,
+      );
+    } else {
+      await stopNotifications(
+        BLE_CONFIG.SENSOR_SERVICE_UUID,
+        BLE_CONFIG.SENSOR_CHARACTERISTIC_UUID,
+      );
     }
   };
 
@@ -110,7 +149,7 @@ export default function Translate() {
                   </p>
                 </div>
                 <Button
-                  onClick={handleConnectGloves}
+                  onClick={connectToDevice}
                   className={`w-full sm:w-auto ${
                     glovesConnected
                       ? "bg-green-600 hover:bg-green-700"
@@ -124,35 +163,7 @@ export default function Translate() {
             </div>
 
             {/* Camera and Translation Area */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Camera Feed */}
-              <div className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-200/50 dark:border-slate-700/50 overflow-hidden shadow-lg transition-colors duration-300">
-                <div className="aspect-video bg-gray-900 relative">
-                  {cameraActive ? (
-                    <video
-                      ref={videoRef}
-                      autoPlay
-                      playsInline
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center flex-col gap-4">
-                      <div className="text-6xl">📷</div>
-                      <p className="text-gray-400 text-center">Camera Inactive</p>
-                    </div>
-                  )}
-                </div>
-                <div className="p-4">
-                  <Button
-                    onClick={() => setCameraActive(!cameraActive)}
-                    variant="outline"
-                    className="w-full"
-                  >
-                    {cameraActive ? "Stop Camera" : "Start Camera"}
-                  </Button>
-                </div>
-              </div>
-
+            <div className="gap-6">
               {/* Translation Output */}
               <div className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-200/50 dark:border-slate-700/50 p-6 sm:p-8 shadow-lg flex flex-col transition-colors duration-300">
                 <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4 transition-colors duration-300">
@@ -198,36 +209,20 @@ export default function Translate() {
                 </div>
               </div>
             </div>
-
-            {/* Full Screen Subtitles */}
-            <div className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-200/50 dark:border-slate-700/50 p-6 sm:p-8 shadow-lg transition-colors duration-300">
-              <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4 transition-colors duration-300">
-                Full Screen Subtitles
-              </h2>
-              <div className="bg-gray-900 rounded-xl aspect-video flex items-end justify-center p-6 sm:p-8 relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none"></div>
-                <p className="text-2xl sm:text-4xl font-bold text-white text-center relative z-10">
-                  {currentTranslation || "Waiting for input..."}
-                </p>
-              </div>
-              <div className="mt-4 flex items-center gap-3 text-sm text-gray-600">
-                <Zap className="w-4 h-4 text-yellow-500" />
-                <span>
-                  Subtitles display in full-screen for use as a secondary
-                  webcam feed
-                </span>
-              </div>
-            </div>
           </div>
 
           {/* Sidebar */}
           <div className="space-y-6">
             {/* Quick Stats */}
             <div className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-200/50 dark:border-slate-700/50 p-6 shadow-lg transition-colors duration-300">
-              <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4 transition-colors duration-300">Status</h3>
+              <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4 transition-colors duration-300">
+                Status
+              </h3>
               <div className="space-y-4">
                 <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-slate-700 rounded-lg transition-colors duration-300">
-                  <span className="text-gray-600 dark:text-gray-300 font-medium transition-colors duration-300">Gloves</span>
+                  <span className="text-gray-600 dark:text-gray-300 font-medium transition-colors duration-300">
+                    Gloves
+                  </span>
                   <span
                     className={`px-3 py-1 rounded-full text-xs font-semibold ${
                       glovesConnected
@@ -235,31 +230,7 @@ export default function Translate() {
                         : "bg-gray-100 text-gray-700"
                     }`}
                   >
-                    {glovesConnected ? "Connected" : "Disconnected"}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                  <span className="text-gray-600 font-medium">Listening</span>
-                  <span
-                    className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                      isListening
-                        ? "bg-blue-100 text-blue-700"
-                        : "bg-gray-100 text-gray-700"
-                    }`}
-                  >
-                    {isListening ? "Active" : "Idle"}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                  <span className="text-gray-600 font-medium">Camera</span>
-                  <span
-                    className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                      cameraActive
-                        ? "bg-green-100 text-green-700"
-                        : "bg-gray-100 text-gray-700"
-                    }`}
-                  >
-                    {cameraActive ? "Active" : "Off"}
+                    {glovesConnected ? `${sensorData}` : "Disconnected"}
                   </span>
                 </div>
               </div>
@@ -268,7 +239,9 @@ export default function Translate() {
             {/* Translation History */}
             <div className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-200/50 dark:border-slate-700/50 p-6 shadow-lg transition-colors duration-300">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-bold text-gray-900 dark:text-white transition-colors duration-300">History</h3>
+                <h3 className="text-lg font-bold text-gray-900 dark:text-white transition-colors duration-300">
+                  History
+                </h3>
                 <button
                   onClick={() => setTranslationHistory([])}
                   className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
@@ -296,18 +269,6 @@ export default function Translate() {
                   </p>
                 )}
               </div>
-            </div>
-
-            {/* Help Section */}
-            <div className="bg-gradient-to-br from-rose-50 to-red-50 dark:from-red-950 dark:to-red-900 rounded-2xl border border-red-200/50 dark:border-red-800/50 p-6 transition-colors duration-300">
-              <h3 className="font-bold text-gray-900 dark:text-white mb-3 transition-colors duration-300">Getting Started</h3>
-              <ol className="text-sm text-gray-700 dark:text-gray-300 space-y-2 list-decimal list-inside transition-colors duration-300">
-                <li>Connect your gloves</li>
-                <li>Start the camera</li>
-                <li>Click "Listen" to begin</li>
-                <li>Sign naturally</li>
-                <li>View translations and speak them out</li>
-              </ol>
             </div>
           </div>
         </div>
