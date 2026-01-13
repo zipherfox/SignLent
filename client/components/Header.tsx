@@ -19,35 +19,19 @@ export default function Header() {
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2 group">
             <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-gradient-to-br from-red-700 to-rose-600 flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow">
-              <span className="text-white font-bold text-lg sm:text-xl">✋</span>
+              <span className="text-white font-bold text-lg sm:text-xl">
+                ✋
+              </span>
             </div>
             <div className="flex flex-col">
-              <span className="font-bold text-gray-900 text-base sm:text-lg">SignVoice</span>
-              <span className="text-[10px] sm:text-xs text-gray-500">Sign to Speech</span>
+              <span className="font-bold text-gray-900 text-base sm:text-lg">
+                SignLent
+              </span>
+              <span className="text-[10px] sm:text-xs text-gray-500">
+                Sign to Speech
+              </span>
             </div>
           </Link>
-
-          {/* Navigation */}
-          <nav className="hidden sm:flex items-center gap-8">
-            <Link 
-              to="/" 
-              className="text-gray-600 hover:text-gray-900 transition-colors font-medium text-sm"
-            >
-              Home
-            </Link>
-            <Link 
-              to="/translate" 
-              className="text-gray-600 hover:text-gray-900 transition-colors font-medium text-sm"
-            >
-              Translator
-            </Link>
-            <a 
-              href="#features" 
-              className="text-gray-600 hover:text-gray-900 transition-colors font-medium text-sm"
-            >
-              Features
-            </a>
-          </nav>
 
           {/* Theme Toggle & CTA Button */}
           <div className="flex items-center gap-2 sm:gap-3">

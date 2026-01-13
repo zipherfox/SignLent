@@ -15,55 +15,55 @@ name: CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   test:
     runs-on: ubuntu-latest
-    
+
     steps:
-    - uses: actions/checkout@v4
-    
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '18'
-    
-    - name: Install pnpm
-      uses: pnpm/action-setup@v2
-      with:
-        version: 10.14.0
-    
-    - name: Install dependencies
-      run: pnpm install
-    
-    - name: Type check
-      run: pnpm typecheck
-    
-    - name: Run tests
-      run: pnpm test
-    
-    - name: Build
-      run: pnpm build
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 10.14.0
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Type check
+        run: pnpm typecheck
+
+      - name: Run tests
+        run: pnpm test
+
+      - name: Build
+        run: pnpm build
 
   deploy-preview:
     runs-on: ubuntu-latest
     needs: test
     if: github.event_name == 'pull_request'
-    
+
     steps:
-    - uses: actions/checkout@v4
-    
-    - name: Deploy to Netlify Preview
-      uses: nwtgck/actions-netlify@v2
-      with:
-        publish-dir: './dist/spa'
-        production-deploy: false
-      env:
-        NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-        NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+      - uses: actions/checkout@v4
+
+      - name: Deploy to Netlify Preview
+        uses: nwtgck/actions-netlify@v2
+        with:
+          publish-dir: "./dist/spa"
+          production-deploy: false
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
 ```
 
 ### Required Secrets
@@ -102,10 +102,10 @@ Netlify provides different contexts for deployments:
 
 [context.production]
   command = "npm install && npm run build:client"
-  
+
 [context.deploy-preview]
   command = "npm install && npm run build:client"
-  
+
 [context.branch-deploy]
   command = "npm install && npm run build:client"
 ```
@@ -113,6 +113,7 @@ Netlify provides different contexts for deployments:
 ### Build Notifications
 
 Enable build notifications:
+
 1. Go to Site settings → Build & deploy → Deploy notifications
 2. Add notifications for:
    - Deploy started
@@ -120,6 +121,7 @@ Enable build notifications:
    - Deploy failed
 
 Options:
+
 - Email notifications
 - Slack integration
 - Webhook
@@ -141,6 +143,7 @@ Options:
 ### Environment Variables
 
 Set different variables per environment:
+
 - Production
 - Preview
 - Development
@@ -186,10 +189,7 @@ Configure `package.json`:
     "prepare": "husky install"
   },
   "lint-staged": {
-    "*.{ts,tsx}": [
-      "prettier --write",
-      "eslint --fix"
-    ]
+    "*.{ts,tsx}": ["prettier --write", "eslint --fix"]
   }
 }
 ```

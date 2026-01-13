@@ -7,15 +7,18 @@
 The codebase has been scanned with CodeQL and all security issues have been addressed.
 
 #### Initial Findings
+
 1. **[js/missing-rate-limiting]** - Missing rate limiting on route handler performing file system access
    - **Location**: server/node-build.ts:18-26
    - **Severity**: Medium
    - **Status**: ✅ RESOLVED
 
 #### Resolution
+
 Added `express-rate-limit` middleware to prevent API abuse and DoS attacks:
 
 **Implementation Details:**
+
 - Middleware: `express-rate-limit` v8.2.1
 - Configuration:
   - Window: 15 minutes
@@ -26,6 +29,7 @@ Added `express-rate-limit` middleware to prevent API abuse and DoS attacks:
 - Location: server/index.ts
 
 **Benefits:**
+
 - Prevents abuse of API endpoints
 - Protects against denial-of-service attacks
 - Limits impact of potential vulnerabilities

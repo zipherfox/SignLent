@@ -22,16 +22,16 @@ This document provides detailed instructions for deploying SignLent to various c
    - Choose the `SignLent` repository
 
 2. **Configure Build Settings**
-   
+
    Netlify will automatically detect the settings from `netlify.toml`, but verify:
    - **Build command**: `npm install && npm run build:client`
    - **Publish directory**: `dist/spa`
    - **Functions directory**: `netlify/functions`
-   
+
    > Note: Netlify uses `npm` instead of `pnpm` as it's more universally available. The build will use the lockfile to ensure consistent dependencies.
 
 3. **Environment Variables** (Optional)
-   
+
    Add any required environment variables in the Netlify dashboard:
    - Navigate to: Site settings → Environment variables
    - Add variables like `PING_MESSAGE` if needed
@@ -44,19 +44,23 @@ This document provides detailed instructions for deploying SignLent to various c
 ### Manual Deployment via CLI
 
 1. **Install Netlify CLI**
+
    ```bash
    npm install -g netlify-cli
    ```
 
 2. **Login to Netlify**
+
    ```bash
    netlify login
    ```
 
 3. **Initialize Site** (First time only)
+
    ```bash
    netlify init
    ```
+
    Follow the prompts to create a new site or link to an existing one.
 
 4. **Deploy to Production**
@@ -67,6 +71,7 @@ This document provides detailed instructions for deploying SignLent to various c
 ### Continuous Deployment
 
 Once connected to GitHub, Netlify will automatically deploy:
+
 - **Production**: When you push to the `main` branch
 - **Preview**: When you create a pull request
 
@@ -81,7 +86,7 @@ Once connected to GitHub, Netlify will automatically deploy:
    - Select the `SignLent` repository
 
 2. **Configure Project**
-   
+
    Vercel should auto-detect the settings, but verify:
    - **Framework Preset**: Vite
    - **Build Command**: `pnpm run build`
@@ -89,7 +94,7 @@ Once connected to GitHub, Netlify will automatically deploy:
    - **Install Command**: `pnpm install`
 
 3. **Environment Variables** (Optional)
-   
+
    Add environment variables in the Vercel dashboard:
    - Go to: Settings → Environment Variables
    - Add variables like `PING_MESSAGE`
@@ -101,14 +106,17 @@ Once connected to GitHub, Netlify will automatically deploy:
 ### Manual Deployment via CLI
 
 1. **Install Vercel CLI**
+
    ```bash
    npm install -g vercel
    ```
 
 2. **Deploy**
+
    ```bash
    vercel
    ```
+
    Follow the prompts to create a new project or link to an existing one.
 
 3. **Deploy to Production**
@@ -121,6 +129,7 @@ Once connected to GitHub, Netlify will automatically deploy:
 ### Build Docker Image
 
 1. **Create Dockerfile** (if not exists)
+
    ```dockerfile
    FROM node:18-alpine
 
@@ -149,6 +158,7 @@ Once connected to GitHub, Netlify will automatically deploy:
    ```
 
 2. **Build Image**
+
    ```bash
    docker build -t signlent:latest .
    ```
@@ -163,7 +173,7 @@ Once connected to GitHub, Netlify will automatically deploy:
 Create `docker-compose.yml`:
 
 ```yaml
-version: '3.8'
+version: "3.8"
 services:
   signlent:
     build: .
@@ -176,6 +186,7 @@ services:
 ```
 
 Run with:
+
 ```bash
 docker-compose up -d
 ```
@@ -184,31 +195,37 @@ docker-compose up -d
 
 ### Available Variables
 
-| Variable | Description | Default | Required |
-|----------|-------------|---------|----------|
-| `PING_MESSAGE` | Custom message for /api/ping endpoint | `"ping"` | No |
-| `NODE_ENV` | Node environment | `"development"` | No |
-| `PORT` | Server port (for custom deployments) | `8080` | No |
+| Variable       | Description                           | Default         | Required |
+| -------------- | ------------------------------------- | --------------- | -------- |
+| `PING_MESSAGE` | Custom message for /api/ping endpoint | `"ping"`        | No       |
+| `NODE_ENV`     | Node environment                      | `"development"` | No       |
+| `PORT`         | Server port (for custom deployments)  | `8080`          | No       |
 
 ### Setting Environment Variables
 
 #### Local Development
+
 Create a `.env` file in the root directory:
+
 ```env
 PING_MESSAGE=pong
 NODE_ENV=development
 ```
 
 #### Netlify
+
 1. Go to Site settings → Environment variables
 2. Add each variable with its value
 
 #### Vercel
+
 1. Go to Settings → Environment Variables
 2. Add each variable for Production/Preview/Development
 
 #### Docker
+
 Pass via command line:
+
 ```bash
 docker run -e PING_MESSAGE=pong -p 8080:8080 signlent:latest
 ```
@@ -222,6 +239,7 @@ Or use `.env` file with Docker Compose.
 **Issue**: Build fails with "command not found: pnpm"
 
 **Solution**: Ensure pnpm is installed in your build environment:
+
 ```bash
 npm install -g pnpm@10.14.0
 ```
@@ -232,7 +250,8 @@ For Netlify, add a `netlify.toml` configuration (already included).
 
 **Issue**: API endpoints return 404
 
-**Solution**: 
+**Solution**:
+
 - **Netlify**: Check that `netlify.toml` has proper redirects
 - **Vercel**: Ensure serverless functions are properly configured
 - Verify the API endpoint starts with `/api/`
@@ -241,7 +260,8 @@ For Netlify, add a `netlify.toml` configuration (already included).
 
 **Issue**: Application loads but styles are missing
 
-**Solution**: 
+**Solution**:
+
 - Clear browser cache
 - Check that `dist/spa/assets` directory is being served
 - Verify build completed successfully
@@ -251,6 +271,7 @@ For Netlify, add a `netlify.toml` configuration (already included).
 **Issue**: Application doesn't use environment variables
 
 **Solution**:
+
 - Verify variables are set in the deployment platform
 - Restart/redeploy the application after adding variables
 - Check variable names match exactly (case-sensitive)
@@ -260,6 +281,7 @@ For Netlify, add a `netlify.toml` configuration (already included).
 **Issue**: Local development fails with "port already in use"
 
 **Solution**:
+
 ```bash
 # Find process using port 8080
 lsof -i :8080
@@ -276,6 +298,7 @@ PORT=3000 pnpm dev
 ### Production Build
 
 The production build is optimized for:
+
 - Tree shaking (removes unused code)
 - Minification (reduces file size)
 - Code splitting (faster initial load)
@@ -286,6 +309,7 @@ The production build is optimized for:
 For Netlify/Vercel, assets are automatically served from their global CDN.
 
 For custom deployments:
+
 1. Use a CDN like Cloudflare or AWS CloudFront
 2. Configure CDN to cache `/assets/*` files
 3. Set appropriate cache headers
@@ -293,6 +317,7 @@ For custom deployments:
 ### Caching Strategy
 
 Recommended cache headers:
+
 - HTML: `Cache-Control: no-cache`
 - CSS/JS: `Cache-Control: public, max-age=31536000, immutable`
 - Images: `Cache-Control: public, max-age=31536000`
@@ -310,6 +335,7 @@ Available in: Project → Analytics tab
 ### Custom Monitoring
 
 Consider integrating:
+
 - [Sentry](https://sentry.io) for error tracking
 - [LogRocket](https://logrocket.com) for session replay
 - [Google Analytics](https://analytics.google.com) for usage tracking
@@ -317,6 +343,7 @@ Consider integrating:
 ## Support
 
 For deployment issues:
+
 - Check [Netlify Documentation](https://docs.netlify.com)
 - Check [Vercel Documentation](https://vercel.com/docs)
 - Open an issue on GitHub
