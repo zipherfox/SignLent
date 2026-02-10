@@ -38,6 +38,7 @@ export default function Translate() {
   } = useBluetooth();
 
   const connectToDevice = async () => {
+    console.log("trying to connect");
     await requestDevice({
       filters: [{ services: [BLE_CONFIG.SENSOR_SERVICE_UUID] }],
       optionalServices: [BLE_CONFIG.SENSOR_SERVICE_UUID],
