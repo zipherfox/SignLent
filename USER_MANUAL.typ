@@ -1,8 +1,8 @@
-#set text(font: "Inter")
+#set text(font: "Cambria")
 #set page(paper: "a4")
 #set page(numbering: "— 1 —")
-#show "SignLent": sl => text(font: "New Computer Modern")[ #smallcaps(sl) ]
-#show heading: set text(font: "New Computer Modern")
+#show "SignLent": sl => text(font: "Calibri")[ #smallcaps(sl) ]
+#show heading: set text(font: "Calibri")
 #show heading.where(level: 1): set text(size: 30pt)
 #show heading.where(level: 1): set heading(numbering: none)
 #set heading(numbering: (first, ..nums) => numbering("I.", ..nums))
