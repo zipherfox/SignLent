@@ -58,8 +58,11 @@ export class MLService {
 
       console.log("Loading TFLite model...");
       const tf = await import("@tensorflow/tfjs-core");
-      const { loadTFLiteModel } = await import("@tensorflow/tfjs-tflite");
-      const tfliteModel = await loadTFLiteModel(modelUrl);
+      await import("@tensorflow/tfjs-backend-cpu");
+      await tf.ready();
+      const tflite = await import("@tensorflow/tfjs-tflite");
+      tflite.setWasmPath("/tflite-wasm/");
+      const tfliteModel = await tflite.loadTFLiteModel(modelUrl);
       console.log("TFLite model loaded");
 
       // Wrap the TFLite model to match the predict interface

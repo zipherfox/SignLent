@@ -33,14 +33,14 @@ export default function Translate() {
 
   // Initialize ML service on mount
   useEffect(() => {
-    mlServiceRef.current
-      .initialize("/models/labels.json", "/models/config.json", "/models/model.tflite")
+    const ml = mlServiceRef.current;
+    ml.initialize("/models/labels.json", "/models/config.json", "/models/model.tflite")
       .then(() => setModelStatus("ready"))
       .catch((err) => {
         console.error("Failed to load ML model:", err);
         setModelStatus("error");
       });
-    return () => mlServiceRef.current.destroy();
+    return () => ml.destroy();
   }, []);
 
   const {
