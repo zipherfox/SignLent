@@ -17,6 +17,11 @@ export default defineConfig({
     alias: {
       "@": path.resolve(__dirname, "./client"),
       "@shared": path.resolve(__dirname, "./shared"),
+      // Use pre-bundled FESM to work around broken internal paths in the alpha package
+      "@tensorflow/tfjs-tflite": path.resolve(
+        __dirname,
+        "node_modules/@tensorflow/tfjs-tflite/dist/tf-tflite.fesm.js",
+      ),
     },
   },
 });

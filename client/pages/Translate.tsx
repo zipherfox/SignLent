@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import Header from "@/components/Header";
 import { Button } from "@/components/ui/button";
 import { Volume2, Hand, RotateCw, Circle, Loader2 } from "lucide-react";
@@ -23,12 +23,25 @@ export default function Translate() {
   const [confidence, setConfidence] = useState<number | null>(null);
   const [translationHistory, setTranslationHistory] = useState<string[]>([]);
   const [latestSensorData, setLatestSensorData] = useState<SensorDataArray | null>(null);
+  const [modelStatus, setModelStatus] = useState<"loading" | "ready" | "error">("loading");
 
   const recordedFramesRef = useRef<SensorDataArray[]>([]);
   const isRecordingRef = useRef(false);
   const recordingTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const progressIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const mlServiceRef = useRef<MLService>(new MLService());
+
+  // Initialize ML service on mount
+  useEffect(() => {
+    mlServiceRef.current
+      .initialize("/models/labels.json", "/models/config.json", "/models/model.tflite")
+      .then(() => setModelStatus("ready"))
+      .catch((err) => {
+        console.error("Failed to load ML model:", err);
+        setModelStatus("error");
+      });
+    return () => mlServiceRef.current.destroy();
+  }, []);
 
   const {
     device,
@@ -338,6 +351,22 @@ export default function Translate() {
                     }`}
                   >
                     {glovesConnected ? "Connected" : "Disconnected"}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-slate-700 rounded-lg transition-colors duration-300">
+                  <span className="text-gray-600 dark:text-gray-300 font-medium transition-colors duration-300">
+                    Model
+                  </span>
+                  <span
+                    className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                      modelStatus === "ready"
+                        ? "bg-green-100 text-green-700"
+                        : modelStatus === "loading"
+                          ? "bg-yellow-100 text-yellow-700"
+                          : "bg-red-100 text-red-700"
+                    }`}
+                  >
+                    {modelStatus === "ready" ? "Ready" : modelStatus === "loading" ? "Loading..." : "Error"}
                   </span>
                 </div>
                 {latestSensorData && (

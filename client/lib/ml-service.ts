@@ -56,9 +56,34 @@ export class MLService {
         this.segmenter.maxGestureFrames = this.config.max_gesture_frames;
       }
 
-      console.log(
-        `Model URL registered: ${modelUrl} (model loading deferred until model files are provided)`,
-      );
+      console.log("Loading TFLite model...");
+      const tf = await import("@tensorflow/tfjs-core");
+      const { loadTFLiteModel } = await import("@tensorflow/tfjs-tflite");
+      const tfliteModel = await loadTFLiteModel(modelUrl);
+      console.log("TFLite model loaded");
+
+      // Wrap the TFLite model to match the predict interface
+      const numFeatures = this.config!.num_features;
+      const maxTimesteps = this.config!.max_timesteps;
+      const Tensor = tf.Tensor;
+      this.model = {
+        predict(input: Float32Array): Float32Array {
+          const inputTensor = tf.tensor(input, [1, maxTimesteps, numFeatures]);
+          const output = tfliteModel.predict(inputTensor);
+          let outputTensor: InstanceType<typeof Tensor>;
+          if (output instanceof Tensor) {
+            outputTensor = output;
+          } else if (Array.isArray(output)) {
+            outputTensor = output[0];
+          } else {
+            outputTensor = Object.values(output)[0] as InstanceType<typeof Tensor>;
+          }
+          const result = outputTensor.dataSync() as Float32Array;
+          inputTensor.dispose();
+          outputTensor.dispose();
+          return result;
+        },
+      };
 
       this.isReady = true;
       console.log("✅ ML Service ready!");
