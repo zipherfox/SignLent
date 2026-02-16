@@ -148,6 +148,10 @@ The SignLent system operates through the following sequence:
 
 
 === Step 2: Device Pairing Configuration
+#figure(
+  image("assets/glove.png", width: 80%),
+  caption: [The SignLent Glove.],
+)
 
 + *Prepare the glove:*
   - Plug in your gloves
