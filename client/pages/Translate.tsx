@@ -54,6 +54,7 @@ export default function Translate() {
 
   const {
     device,
+    error,
     isSupported,
     connect,
     requestDevice,
@@ -130,7 +131,7 @@ export default function Translate() {
     }
 
     await requestDevice({
-      filters: [{ services: [BLE_CONFIG.SENSOR_SERVICE_UUID] }],
+      filters: [{ name: "SignGoGlove" }],
       optionalServices: [BLE_CONFIG.SENSOR_SERVICE_UUID],
     });
 
@@ -142,9 +143,12 @@ export default function Translate() {
           BLE_CONFIG.SENSOR_CHARACTERISTIC_UUID,
           handleBLENotification,
         );
+        console.debug(`started: ${started}`);
         if (started) {
           setGlovesConnected(true);
         }
+      } else {
+        console.error(`Cannot connect to ${device.name}: ${error}`);
       }
     }
   };
