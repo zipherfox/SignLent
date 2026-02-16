@@ -5,7 +5,7 @@ import { Volume2, Hand, RotateCw, Circle, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
 import { useBluetooth } from "@/hooks/use-bluetooth";
 import { MLService } from "@/lib/ml-service";
-import type { SensorDataArray } from "@shared/MLTypes";
+import type { SensorDataArray } from "@/lib/MLTypes";
 
 const BLE_CONFIG = {
   SENSOR_SERVICE_UUID: "f40d6fd3-70e8-4008-bf64-03a57b87fdc6",
