@@ -5,7 +5,7 @@ import type {
   ProcessFrameResult,
   PredictionResult,
   ProbabilityItem,
-} from "@shared/MLTypes";
+} from "./MLTypes";
 
 export class MLService {
   private model: { predict(input: Float32Array): Float32Array } | null = null;
@@ -79,7 +79,9 @@ export class MLService {
           } else if (Array.isArray(output)) {
             outputTensor = output[0];
           } else {
-            outputTensor = Object.values(output)[0] as InstanceType<typeof Tensor>;
+            outputTensor = Object.values(output)[0] as InstanceType<
+              typeof Tensor
+            >;
           }
           const result = outputTensor.dataSync() as Float32Array;
           inputTensor.dispose();
@@ -178,8 +180,7 @@ export class MLService {
 
     if (totalSaturatedReadings > 0) {
       const totalFlexReadings = sensorData.length * 5;
-      const saturationPct =
-        (totalSaturatedReadings / totalFlexReadings) * 100;
+      const saturationPct = (totalSaturatedReadings / totalFlexReadings) * 100;
       console.log(
         `⚠️  Saturation detected: ${totalSaturatedReadings}/${totalFlexReadings} readings (${saturationPct.toFixed(1)}%) at 4095`,
       );
@@ -359,7 +360,9 @@ export class MLService {
       }),
     );
 
-    console.log(`Prediction: ${predictedWord} (${(topConf * 100).toFixed(2)}%)`);
+    console.log(
+      `Prediction: ${predictedWord} (${(topConf * 100).toFixed(2)}%)`,
+    );
 
     return {
       word: predictedWord,

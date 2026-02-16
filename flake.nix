@@ -34,6 +34,7 @@
 
           buildPhase = ''
             runHook preBuild
+            pnpm run postinstall
             pnpm run build
             runHook postBuild
           '';
