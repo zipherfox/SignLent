@@ -22,19 +22,28 @@ export default function Translate() {
   const [currentTranslation, setCurrentTranslation] = useState("");
   const [confidence, setConfidence] = useState<number | null>(null);
   const [translationHistory, setTranslationHistory] = useState<string[]>([]);
-  const [latestSensorData, setLatestSensorData] = useState<SensorDataArray | null>(null);
-  const [modelStatus, setModelStatus] = useState<"loading" | "ready" | "error">("loading");
+  const [latestSensorData, setLatestSensorData] =
+    useState<SensorDataArray | null>(null);
+  const [modelStatus, setModelStatus] = useState<"loading" | "ready" | "error">(
+    "loading",
+  );
 
   const recordedFramesRef = useRef<SensorDataArray[]>([]);
   const isRecordingRef = useRef(false);
   const recordingTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const progressIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const progressIntervalRef = useRef<ReturnType<typeof setInterval> | null>(
+    null,
+  );
   const mlServiceRef = useRef<MLService>(new MLService());
 
   // Initialize ML service on mount
   useEffect(() => {
     const ml = mlServiceRef.current;
-    ml.initialize("/models/labels.json", "/models/config.json", "/models/model.tflite")
+    ml.initialize(
+      "/models/labels.json",
+      "/models/config.json",
+      "/models/model.tflite",
+    )
       .then(() => setModelStatus("ready"))
       .catch((err) => {
         console.error("Failed to load ML model:", err);
@@ -45,6 +54,7 @@ export default function Translate() {
 
   const {
     device,
+    isSupported,
     connect,
     requestDevice,
     startNotifications,
@@ -252,6 +262,7 @@ export default function Translate() {
                 </div>
                 <Button
                   onClick={connectToDevice}
+                  disabled={!isSupported}
                   className={`w-full sm:w-auto ${
                     glovesConnected
                       ? "bg-green-600 hover:bg-green-700"
@@ -259,7 +270,11 @@ export default function Translate() {
                   } text-white font-semibold`}
                 >
                   <Hand className="w-4 h-4 mr-2" />
-                  {glovesConnected ? "Disconnect" : "Connect Gloves"}
+                  {isSupported
+                    ? glovesConnected
+                      ? "Disconnect"
+                      : "Connect Gloves"
+                    : "Browser not supported"}
                 </Button>
               </div>
             </div>
@@ -309,7 +324,11 @@ export default function Translate() {
                   {isRecording ? (
                     <>
                       <Circle className="w-4 h-4 mr-2 fill-current" />
-                      Recording ({Math.ceil(RECORD_DURATION_MS / 1000 * (1 - recordProgress))}s)
+                      Recording (
+                      {Math.ceil(
+                        (RECORD_DURATION_MS / 1000) * (1 - recordProgress),
+                      )}
+                      s)
                     </>
                   ) : (
                     <>
@@ -366,15 +385,43 @@ export default function Translate() {
                           : "bg-red-100 text-red-700"
                     }`}
                   >
-                    {modelStatus === "ready" ? "Ready" : modelStatus === "loading" ? "Loading..." : "Error"}
+                    {modelStatus === "ready"
+                      ? "Ready"
+                      : modelStatus === "loading"
+                        ? "Loading..."
+                        : "Error"}
                   </span>
                 </div>
                 {latestSensorData && (
                   <div className="p-3 bg-gray-50 dark:bg-slate-700 rounded-lg text-xs font-mono text-gray-600 dark:text-gray-300 transition-colors duration-300 space-y-1">
-                    <div>Flex: {latestSensorData.slice(0, 5).map((v) => v.toFixed(0)).join(", ")}</div>
-                    <div>Quat: {latestSensorData.slice(5, 9).map((v) => v.toFixed(2)).join(", ")}</div>
-                    <div>Accel: {latestSensorData.slice(9, 12).map((v) => v.toFixed(2)).join(", ")}</div>
-                    <div>Gyro: {latestSensorData.slice(12, 15).map((v) => v.toFixed(2)).join(", ")}</div>
+                    <div>
+                      Flex:{" "}
+                      {latestSensorData
+                        .slice(0, 5)
+                        .map((v) => v.toFixed(0))
+                        .join(", ")}
+                    </div>
+                    <div>
+                      Quat:{" "}
+                      {latestSensorData
+                        .slice(5, 9)
+                        .map((v) => v.toFixed(2))
+                        .join(", ")}
+                    </div>
+                    <div>
+                      Accel:{" "}
+                      {latestSensorData
+                        .slice(9, 12)
+                        .map((v) => v.toFixed(2))
+                        .join(", ")}
+                    </div>
+                    <div>
+                      Gyro:{" "}
+                      {latestSensorData
+                        .slice(12, 15)
+                        .map((v) => v.toFixed(2))
+                        .join(", ")}
+                    </div>
                   </div>
                 )}
               </div>
