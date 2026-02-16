@@ -48,12 +48,10 @@ server.listen(port, () => {
 // Graceful shutdown
 process.on("SIGTERM", () => {
   console.log("🛑 Received SIGTERM, shutting down gracefully");
-  server.close();
-  process.exit(0);
+  server.close(() => process.exit(0));
 });
 
 process.on("SIGINT", () => {
   console.log("🛑 Received SIGINT, shutting down gracefully");
-  server.close();
-  process.exit(0);
+  server.close(() => process.exit(0));
 });
