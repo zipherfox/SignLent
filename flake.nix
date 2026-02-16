@@ -56,18 +56,14 @@
           wrapper = pkgs.writeShellScriptBin "signlent" ''
             set -euo pipefail
 
-            CERT_DIR="''${XDG_STATE_HOME:-$HOME/.local/state}/signlent/certs"
-            KEY="$CERT_DIR/key.pem"
-            CERT="$CERT_DIR/cert.pem"
+            CERT_DIR="$(mktemp -d)"
+            trap "rm -rf $CERT_DIR" EXIT
 
-            if [ ! -f "$KEY" ] || [ ! -f "$CERT" ]; then
-              echo "🔐 Generating self-signed TLS certificate for localhost…"
-              mkdir -p "$CERT_DIR"
-              ${pkgs.openssl}/bin/openssl req -x509 \
-                -newkey ec -pkeyopt ec_paramgen_curve:prime256v1 \
-                -nodes -keyout "$KEY" -out "$CERT" \
-                -days 365 -subj "/CN=localhost" 2>/dev/null
-            fi
+            echo "🔐 Generating self-signed TLS certificate for localhost…"
+            ${pkgs.openssl}/bin/openssl req -x509 \
+              -newkey ec -pkeyopt ec_paramgen_curve:prime256v1 \
+              -nodes -keyout "$CERT_DIR/key.pem" -out "$CERT_DIR/cert.pem" \
+              -days 365 -subj "/CN=localhost" 2>/dev/null
 
             export SIGNLENT_CERT_DIR="$CERT_DIR"
             exec ${pkgs.nodejs_22}/bin/node ${signlent}/lib/signlent/server/node-build.mjs
