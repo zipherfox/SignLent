@@ -1,4 +1,6 @@
 import path from "path";
+import https from "https";
+import fs from "fs";
 import { createServer } from "./index";
 import * as express from "express";
 
@@ -12,32 +14,44 @@ const distPath = path.join(__dirname, "../spa");
 // Serve static files
 app.use(express.static(distPath));
 
-// Handle React Router - serve index.html for all non-API routes
-// This middleware is intentionally the last one and always responds (no next())
-// It serves index.html for all routes that aren't API endpoints, enabling SPA routing
-app.use((req, res) => {
-  // Don't serve index.html for API routes
-  if (req.path.startsWith("/api/") || req.path.startsWith("/health")) {
-    return res.status(404).json({ error: "API endpoint not found" });
-  }
-
-  // Serve index.html for all other routes (SPA routing)
+// Handle React Router - serve index.html for all routes (SPA routing)
+app.use((_req, res) => {
   res.sendFile(path.join(distPath, "index.html"));
 });
 
-app.listen(port, () => {
-  console.log(`🚀 Fusion Starter server running on port ${port}`);
-  console.log(`📱 Frontend: http://localhost:${port}`);
-  console.log(`🔧 API: http://localhost:${port}/api`);
+// Self-signed certificate for localhost HTTPS
+// SIGNLENT_CERT_DIR env var allows overriding the cert location (used by nix wrapper)
+const certDir = process.env.SIGNLENT_CERT_DIR || path.join(__dirname, "../certs");
+const keyPath = path.join(certDir, "key.pem");
+const certPath = path.join(certDir, "cert.pem");
+
+if (!fs.existsSync(keyPath) || !fs.existsSync(certPath)) {
+  console.error("❌ Missing TLS certificates. Generate them with:");
+  console.error(
+    `  mkdir -p ${certDir} && openssl req -x509 -newkey ec -pkeyopt ec_paramgen_curve:prime256v1 -nodes -keyout ${keyPath} -out ${certPath} -days 365 -subj "/CN=localhost"`,
+  );
+  process.exit(1);
+}
+
+const server = https.createServer(
+  {
+    key: fs.readFileSync(keyPath),
+    cert: fs.readFileSync(certPath),
+  },
+  app,
+);
+
+server.listen(port, () => {
+  console.log(`🚀 SignLent running at https://localhost:${port}`);
 });
 
 // Graceful shutdown
 process.on("SIGTERM", () => {
   console.log("🛑 Received SIGTERM, shutting down gracefully");
-  process.exit(0);
+  server.close(() => process.exit(0));
 });
 
 process.on("SIGINT", () => {
   console.log("🛑 Received SIGINT, shutting down gracefully");
-  process.exit(0);
+  server.close(() => process.exit(0));
 });
