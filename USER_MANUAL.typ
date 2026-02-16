@@ -143,6 +143,7 @@ The SignLent system operates through the following sequence:
   - Opera (version 76+)
 + Navigate to the Web UI
 + Grant necessary permissions when prompted
++ Wait for the "Model" in the status panel on the side to become #text(green)[Ready].
 
 *Note:* Safari and Firefox have limited Bluetooth Web API support. Chrome is strongly recommended for optimal compatibility.
 
@@ -158,9 +159,14 @@ The SignLent system operates through the following sequence:
   - Relax your hand and allow it to fall towards gravity, in it's natrual position flush with your torso.
   - Allow up to 15 seconds for the glove to calibrate.
 
-+ *Initiate pairing from web app:*
+#figure(
+  image("assets/ui-bluetooth.png", width: 80%),
+  caption: [The Bluetooth connection popup.],
+)
+
+2. *Initiate pairing from web app:*
   - Click *"Connect Gloves"*
-  - The app will scan for available BLE devices
+  - The site will scan for available BLE devices
 
 + *Select your device:*
   - Identify your glove in the list: *"SignGoGlove"*
@@ -169,7 +175,7 @@ The SignLent system operates through the following sequence:
 + *Complete pairing:*
   - Browser will request permission to connect, click *"Pair"*
   - Wait for connection confirmation (typically 5-10 seconds)
-  - Web app will display: *"Device Connected Successfully"*
+  - The button will display: *"Gloves Connected"*
 == #header[ Features and Functions ]
 
 *Real-Time Gesture Recognition*
